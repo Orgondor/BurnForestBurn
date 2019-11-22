@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class InteractionCheck : MonoBehaviour
+[System.Obsolete]
+public class InteractionCheck : NetworkBehaviour
 {
 
     // Start is called before the first frame update
@@ -26,9 +28,15 @@ public class InteractionCheck : MonoBehaviour
 
                 if (hitObject.tag == "tree")
                 {
-                    Destroy(hitObject);
+                    CmdDestroyTree(hitObject);
                 }
             }
         }
+    }
+
+    [Command]
+    void CmdDestroyTree(GameObject treeToBeDestroyed)
+    {
+        Destroy(treeToBeDestroyed);
     }
 }
