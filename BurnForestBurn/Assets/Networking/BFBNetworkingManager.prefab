@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4325521073515855406}
   - component: {fileID: 4325521073515855405}
-  - component: {fileID: 4325521073515855404}
+  - component: {fileID: 3084262114638831163}
   m_Layer: 0
   m_Name: BFBNetworkingManager
   m_TagString: Untagged
@@ -114,7 +114,7 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
---- !u!114 &4325521073515855404
+--- !u!114 &3084262114638831163
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,10 +123,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4325521073515855403}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4394a3eef724546f896557197e2d6c44, type: 3}
+  m_Script: {fileID: 11500000, guid: 24689c82c5ef741d0b04b871d34d57ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 0}
-  showGUI: 1
-  offsetX: 0
-  offsetY: 0
