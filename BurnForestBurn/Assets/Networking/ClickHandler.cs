@@ -1,20 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Networking;
 
-public class InteractionCheck : MonoBehaviour
+[System.Obsolete]
+public class ClickHandler : NetworkBehaviour
 {
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
     {
-
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
@@ -26,9 +19,16 @@ public class InteractionCheck : MonoBehaviour
 
                 if (hitObject.tag == "tree")
                 {
-                    Destroy(hitObject);
+                    CmdDestroyTree(hitObject);
                 }
             }
         }
+    }
+
+    [Command]
+    void CmdDestroyTree(GameObject tree)
+    {
+        Debug.Log("HIT");
+        NetworkServer.Destroy(tree);
     }
 }
