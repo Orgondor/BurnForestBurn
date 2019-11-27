@@ -15,7 +15,7 @@ public class TreeSpawner : NetworkBehaviour
     void Start()
     {
 
-        if (treePrefab && isServer)
+        if (isServer)
         {
             for (int i = 0; i < numberOfTrees; i++)
             {
