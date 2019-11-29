@@ -364,7 +364,7 @@ PrefabInstance:
     - target: {fileID: 4325521073515855405, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
         type: 3}
       propertyPath: m_SpawnPrefabs.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4325521073515855405, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
         type: 3}
@@ -385,13 +385,19 @@ PrefabInstance:
     - target: {fileID: 4325521073515855405, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
         type: 3}
       propertyPath: m_OnlineScene
-      value: AxelsScene
+      value: maxScene
       objectReference: {fileID: 0}
     - target: {fileID: 4325521073515855405, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
         type: 3}
       propertyPath: m_SpawnPrefabs.Array.data[0]
       value: 
       objectReference: {fileID: 7624980037734330939, guid: 339ecc945dc322a41966949d338bfccc,
+        type: 3}
+    - target: {fileID: 4325521073515855405, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
+      propertyPath: m_SpawnPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 5307983514846788080, guid: aaa4b584da732de4382dd5b48f5e3e7d,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9, type: 3}

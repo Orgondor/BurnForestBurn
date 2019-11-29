@@ -25,10 +25,22 @@ public class ClickHandler : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    void RpcDestroyTree(GameObject tree)
+    {
+
+        Debug.Log("RpcDestroyTree");
+        TreeBehaviour tb = tree.GetComponent<TreeBehaviour>();
+        tb.DestroyTree();
+    }
+
     [Command]
     void CmdDestroyTree(GameObject tree)
     {
-        Debug.Log("HIT");
-        NetworkServer.Destroy(tree);
+        if (!isServer)
+            return;
+
+        Debug.Log("CmdDestroyTree");
+        RpcDestroyTree(tree);
     }
 }
