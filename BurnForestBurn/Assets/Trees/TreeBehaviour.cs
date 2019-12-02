@@ -6,12 +6,13 @@ using UnityEngine.Networking;
 public class TreeBehaviour : NetworkBehaviour
 {
     public AreaTreeController atc;
-
+    private BurnTreeAnimation bt;
     [SyncVar]
     public NetworkInstanceId parentNetId;
 
     public override void OnStartClient()
     {
+        bt = gameObject.GetComponent<BurnTreeAnimation>();
         GameObject parentObject = ClientScene.FindLocalObject(parentNetId);
 
         atc = parentObject.GetComponent<AreaTreeController>();
@@ -24,7 +25,10 @@ public class TreeBehaviour : NetworkBehaviour
         if (atc)
         {
             atc.treeHarvested();
-            gameObject.SetActive(false);
+            bt.destroyAnimation();
+            
+            //gameObject.SetActive(false);
+            
         }
     }
 }
