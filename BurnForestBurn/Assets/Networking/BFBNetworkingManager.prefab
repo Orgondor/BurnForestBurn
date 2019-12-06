@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4325521073515855406}
-  - component: {fileID: 4325521073515855405}
+  - component: {fileID: 3704782083353289530}
   - component: {fileID: 3084262114638831163}
   m_Layer: 0
   m_Name: BFBNetworkingManager
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4325521073515855405
+--- !u!114 &3704782083353289530
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,18 +47,21 @@ MonoBehaviour:
   m_NetworkPort: 7777
   m_ServerBindToIP: 0
   m_ServerBindAddress: 
-  m_NetworkAddress: localhost
+  m_NetworkAddress: 192.168.1.105
   m_DontDestroyOnLoad: 1
   m_RunInBackground: 1
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 0}
-  m_AutoCreatePlayer: 0
+  m_PlayerPrefab: {fileID: 4331153453730598121, guid: f8a3073f85f374fa6afe28e7b992beaf,
+    type: 3}
+  m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
-  m_OfflineScene: 
-  m_OnlineScene: 
-  m_SpawnPrefabs: []
+  m_OfflineScene: StartScene
+  m_OnlineScene: maxScene
+  m_SpawnPrefabs:
+  - {fileID: 7624980037734330939, guid: 339ecc945dc322a41966949d338bfccc, type: 3}
+  - {fileID: 5307983514846788080, guid: aaa4b584da732de4382dd5b48f5e3e7d, type: 3}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:

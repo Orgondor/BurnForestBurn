@@ -20,10 +20,10 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.4780288, g: 0.5, b: 0.36084905, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1
+  m_AmbientIntensity: 1.17
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
@@ -145,7 +145,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 209029950}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &209029952
 Camera:
   m_ObjectHideFlags: 0
@@ -306,6 +306,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BFBNetworkingManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4325521073515855403, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 4325521073515855406, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -368,6 +373,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4325521073515855405, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
         type: 3}
+      propertyPath: m_Channels.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325521073515855405, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
       propertyPath: m_AutoCreatePlayer
       value: 1
       objectReference: {fileID: 0}
@@ -399,5 +409,58 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5307983514846788080, guid: aaa4b584da732de4382dd5b48f5e3e7d,
         type: 3}
+    - target: {fileID: 4325521073515855405, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
+      propertyPath: matchSize
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325521073515855405, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
+      propertyPath: m_Channels.Array.data[0]
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8381052308441569759, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
+      propertyPath: m_SpawnPrefabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8381052308441569759, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
+      propertyPath: m_OfflineScene
+      value: StartScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 8381052308441569759, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
+      propertyPath: m_OnlineScene
+      value: maxScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 8381052308441569759, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
+      propertyPath: m_SpawnPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 7624980037734330939, guid: 339ecc945dc322a41966949d338bfccc,
+        type: 3}
+    - target: {fileID: 8381052308441569759, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
+      propertyPath: m_SpawnPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 5307983514846788080, guid: aaa4b584da732de4382dd5b48f5e3e7d,
+        type: 3}
+    - target: {fileID: 8381052308441569759, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
+      propertyPath: m_PlayerPrefab
+      value: 
+      objectReference: {fileID: 4331153453730598121, guid: f8a3073f85f374fa6afe28e7b992beaf,
+        type: 3}
+    - target: {fileID: 8381052308441569759, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
+      propertyPath: matchSize
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8381052308441569759, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9,
+        type: 3}
+      propertyPath: m_NetworkAddress
+      value: 192.168.1.105
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c9f5763da80b4cac8c6092a9dbdb1f9, type: 3}

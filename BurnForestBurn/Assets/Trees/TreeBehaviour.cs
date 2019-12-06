@@ -10,6 +10,8 @@ public class TreeBehaviour : NetworkBehaviour
     [SyncVar]
     public NetworkInstanceId parentNetId;
 
+    public int team = 0;
+
     public override void OnStartClient()
     {
         GameObject parentObject = ClientScene.FindLocalObject(parentNetId);
