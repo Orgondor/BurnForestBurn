@@ -7,17 +7,28 @@ using UnityEngine.Networking;
 public class BFBGameManager : NetworkBehaviour
 {
     public delegate void OnGameStart();
+    public delegate void OnGameEnd(int winningTeam);
 
     public int localPlayerTeam = -1;
     public AreaTreeController[] areaTreeControllers;
 
     private bool[] teamsReady = { false, false };
+    private int[] teamAreas = { 0, 0 };
+    private int[] teamAreasDone = { 0, 0 };
     private bool gameStarted = false;
     private List<OnGameStart> onGameStart;
+    private List<OnGameEnd> onGameEnd;
 
     void Start()
     {
         onGameStart = new List<OnGameStart>();
+        onGameEnd = new List<OnGameEnd>();
+
+        foreach (AreaTreeController atc in areaTreeControllers)
+        {
+            atc.SetOnAreaDone(AreaDone);
+            atc.SetOnRegisterTeamArea(RegisterTeamArea);
+        }
     }
 
     void GameStart()
@@ -43,9 +54,35 @@ public class BFBGameManager : NetworkBehaviour
         return gameStarted;
     }
 
+    public void AreaDone(int team)
+    {
+        teamAreasDone[team]++;
+
+        if (teamAreasDone[team] >= teamAreas[team])
+        {
+            // We have a winner!
+            Debug.LogFormat("Team {0} wins!", team);
+
+            foreach (OnGameEnd oge in onGameEnd)
+            {
+                oge(team);
+            }
+        }
+    }
+
+    public void RegisterTeamArea(int team)
+    {
+        teamAreas[team]++;
+    }
+
     public void RegisterOnGameStart(OnGameStart ogs)
     {
         onGameStart.Add(ogs);
+    }
+
+    public void RegisterOnGameEnd(OnGameEnd oge)
+    {
+        onGameEnd.Add(oge);
     }
 
     public void TeamReady(int team, bool ready)

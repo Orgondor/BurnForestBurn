@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using TMPro;
 
 [System.Obsolete]
 public class ClickHandler : NetworkBehaviour
 {
     private int team = -1;
     private BFBGameManager gameManager = null;
+    private bool gameEnded = false;
 
     public Button readyButton;
+    public TextMeshProUGUI gameEndedText;
 
     // For debug on PC
     private bool clickBegan = true;
@@ -24,6 +27,7 @@ public class ClickHandler : NetworkBehaviour
                 if (gameManager)
                 {
                     gameManager.RegisterOnGameStart(OnGameStart);
+                    gameManager.RegisterOnGameEnd(OnGameEnd);
                     if (isLocalPlayer)
                     {
                         gameManager.localPlayerTeam = Random.Range(0, 2);
@@ -45,42 +49,44 @@ public class ClickHandler : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        if (isLocalPlayer && !gameEnded)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-            RaycastHit rayhit = new RaycastHit();
-
-            if (Physics.Raycast(ray, out rayhit))
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
             {
-                GameObject hitObject = rayhit.collider.gameObject;
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                RaycastHit rayhit = new RaycastHit();
 
-                if (hitObject.tag == "tree")
+                if (Physics.Raycast(ray, out rayhit))
                 {
-                    CmdDestroyTree(hitObject);
+                    GameObject hitObject = rayhit.collider.gameObject;
+
+                    if (hitObject.tag == "tree")
+                    {
+                        CmdDestroyTree(hitObject);
+                    }
                 }
             }
-        }
 
-        // For debug on PC
-        if (Input.GetMouseButtonDown(0) && clickBegan)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit rayhit = new RaycastHit();
-            clickBegan = false;
-
-            if (Physics.Raycast(ray, out rayhit))
+            // For debug on PC
+            else if (Input.GetMouseButtonDown(0) && clickBegan)
             {
-                GameObject hitObject = rayhit.collider.gameObject;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit rayhit = new RaycastHit();
+                clickBegan = false;
 
-                if (hitObject.tag == "tree")
+                if (Physics.Raycast(ray, out rayhit))
                 {
-                    CmdDestroyTree(hitObject);
+                    GameObject hitObject = rayhit.collider.gameObject;
+
+                    if (hitObject.tag == "tree")
+                    {
+                        CmdDestroyTree(hitObject);
+                    }
                 }
             }
+            else if (!Input.GetMouseButtonDown(0))
+                clickBegan = true;
         }
-
-        if (!Input.GetMouseButtonDown(0))
-            clickBegan = true;
     }
 
     public void ReadyClicked()
@@ -94,6 +100,25 @@ public class ClickHandler : NetworkBehaviour
             return;
 
         RpcOnGameStart();
+    }
+
+    void OnGameEnd(int winningTeam)
+    {
+        if (!isServer)
+            return;
+
+        RpcOnGameEnd(winningTeam == team);
+    }
+
+    [ClientRpc]
+    void RpcOnGameEnd(bool winner)
+    {
+        gameEnded = true;
+        if (isLocalPlayer)
+        {
+            gameEndedText.SetText(winner ? "You Won" : "You Lost");
+            gameEndedText.gameObject.SetActive(true);
+        }
     }
 
     [ClientRpc]
