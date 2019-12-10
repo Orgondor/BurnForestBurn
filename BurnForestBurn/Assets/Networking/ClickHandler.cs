@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 [System.Obsolete]
 public class ClickHandler : NetworkBehaviour
@@ -9,8 +10,10 @@ public class ClickHandler : NetworkBehaviour
     private int team = -1;
     private BFBGameManager gameManager = null;
     private bool gameEnded = false;
+    private NetworkManager networkManager = null;
 
     public Button readyButton;
+    public Button restartButton;
     public TextMeshProUGUI gameEndedText;
 
     // For debug on PC
@@ -21,6 +24,7 @@ public class ClickHandler : NetworkBehaviour
         if (isServer)
         {
             GameObject temp = GameObject.Find("GameManager");
+
             if (temp)
             {
                 gameManager = temp.GetComponent<BFBGameManager>();
@@ -36,6 +40,18 @@ public class ClickHandler : NetworkBehaviour
                     else
                         team = 1 - gameManager.localPlayerTeam;
                 }
+            }
+
+
+            temp = GameObject.Find("BFBNetworkingManager");
+            if (temp)
+            {
+                networkManager = temp.GetComponent<NetworkManager>();
+            }
+
+            if (!networkManager)
+            {
+                Debug.Log("NetworkManager not found");
             }
         }
 
@@ -94,6 +110,11 @@ public class ClickHandler : NetworkBehaviour
         CmdReadyClicked();
     }
 
+    public void RestartClicked()
+    {
+        CmdRestartClicked();
+    }
+
     void OnGameStart()
     {
         if (!isServer)
@@ -118,6 +139,12 @@ public class ClickHandler : NetworkBehaviour
         {
             gameEndedText.SetText(winner ? "You Won" : "You Lost");
             gameEndedText.gameObject.SetActive(true);
+
+            if (isServer)
+            {
+                restartButton.gameObject.SetActive(true);
+                restartButton.interactable = true;
+            }
         }
     }
 
@@ -135,9 +162,15 @@ public class ClickHandler : NetworkBehaviour
             return;
 
         gameManager.TeamReady(team, true);
+    }
 
-        // For debug only
-        //gameManager.TeamReady(1 - team, true);
+    [Command]
+    void CmdRestartClicked()
+    {
+        if (!isServer)
+            return;
+
+        networkManager.ServerChangeScene(SceneManager.GetActiveScene().name);
     }
 
     [ClientRpc]
