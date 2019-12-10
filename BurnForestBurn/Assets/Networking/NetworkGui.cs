@@ -65,24 +65,24 @@ namespace UnityEngine.Networking
                     }
                 }
             }
-            else
-            {
-                if (NetworkServer.active)
-                {
-                    string serverMsg = "Server: port=" + manager.networkPort;
-                    if (manager.useWebSockets)
-                    {
-                        serverMsg += " (Using WebSockets)";
-                    }
-                    GUI.Label(new Rect(xpos, ypos, buttonWidth, buttonHeight), serverMsg);
-                    ypos += spacing;
-                }
-                if (manager.IsClientConnected())
-                {
-                    GUI.Label(new Rect(xpos, ypos, buttonWidth, buttonHeight), "Client: address=" + manager.networkAddress + " port=" + manager.networkPort);
-                    ypos += spacing;
-                }
-            }
+            //else
+            //{
+            //    if (NetworkServer.active)
+            //    {
+            //        string serverMsg = "Server: port=" + manager.networkPort;
+            //        if (manager.useWebSockets)
+            //        {
+            //            serverMsg += " (Using WebSockets)";
+            //        }
+            //        GUI.Label(new Rect(xpos, ypos, buttonWidth, buttonHeight), serverMsg);
+            //        ypos += spacing;
+            //    }
+            //    if (manager.IsClientConnected())
+            //    {
+            //        GUI.Label(new Rect(xpos, ypos, buttonWidth, buttonHeight), "Client: address=" + manager.networkAddress + " port=" + manager.networkPort);
+            //        ypos += spacing;
+            //    }
+            //}
 
             if (manager.IsClientConnected() && !ClientScene.ready)
             {
@@ -98,14 +98,14 @@ namespace UnityEngine.Networking
                 ypos += spacing;
             }
 
-            if (NetworkServer.active || manager.IsClientConnected())
-            {
-                if (GUI.Button(new Rect(xpos, ypos, buttonWidth, buttonHeight), "Quit"))
-                {
-                    manager.StopHost();
-                }
-                ypos += spacing;
-            }
+            //if (NetworkServer.active || manager.IsClientConnected())
+            //{
+            //    if (GUI.Button(new Rect(xpos, ypos, buttonWidth, buttonHeight), "Quit"))
+            //    {
+            //        manager.StopHost();
+            //    }
+            //    ypos += spacing;
+            //}
         }
     }
 }
