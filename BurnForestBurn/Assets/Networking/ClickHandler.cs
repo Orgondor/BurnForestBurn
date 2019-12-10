@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 
 [System.Obsolete]
@@ -7,11 +8,10 @@ public class ClickHandler : NetworkBehaviour
     private int team = -1;
     private BFBGameManager gameManager = null;
 
+    public Button readyButton;
+
     // For debug on PC
     private bool clickBegan = true;
-
-    bool foundTag = false;
-    bool gotGameManager = false;
 
     void Start()
     {
@@ -21,10 +21,9 @@ public class ClickHandler : NetworkBehaviour
             if (temp)
             {
                 gameManager = temp.GetComponent<BFBGameManager>();
-                foundTag = true;
                 if (gameManager)
                 {
-                    gotGameManager = true;
+                    gameManager.RegisterOnGameStart(OnGameStart);
                     if (isLocalPlayer)
                     {
                         gameManager.localPlayerTeam = Random.Range(0, 2);
@@ -34,8 +33,12 @@ public class ClickHandler : NetworkBehaviour
                         team = 1 - gameManager.localPlayerTeam;
                 }
             }
+        }
 
-            RpcDebugStart(foundTag, gotGameManager);
+        if (isLocalPlayer)
+        {
+            readyButton.interactable = true;
+            readyButton.gameObject.SetActive(true);
         }
     }
 
@@ -80,6 +83,38 @@ public class ClickHandler : NetworkBehaviour
             clickBegan = true;
     }
 
+    public void ReadyClicked()
+    {
+        CmdReadyClicked();
+    }
+
+    void OnGameStart()
+    {
+        if (!isServer)
+            return;
+
+        RpcOnGameStart();
+    }
+
+    [ClientRpc]
+    void RpcOnGameStart()
+    {
+        readyButton.interactable = false;
+        readyButton.gameObject.SetActive(false);
+    }
+
+    [Command]
+    void CmdReadyClicked()
+    {
+        if (!isServer)
+            return;
+
+        gameManager.TeamReady(team, true);
+
+        // For debug only
+        //gameManager.TeamReady(1 - team, true);
+    }
+
     [ClientRpc]
     void RpcDestroyTree(GameObject tree)
     {
@@ -93,33 +128,6 @@ public class ClickHandler : NetworkBehaviour
         Debug.LogFormat("Cut attempt, teams - Tree: {0} Player: {1}", treeTeam, playerTeam);
     }
 
-    [ClientRpc]
-    void RpcDebugStart(bool foundTag, bool gotGameManager)
-    {
-        Debug.LogFormat("Start - foundTag: {0} gotGameManager: {1}", foundTag, gotGameManager);
-    }
-
-    [ClientRpc]
-    void RpcSetTeam(int teamId)
-    {
-        if (isLocalPlayer)
-        {
-            Debug.LogFormat("Local!!!", teamId);
-        }
-        Debug.LogFormat("team set {0}", teamId);
-        team = teamId;
-    }
-
-    [Command]
-    void CmdSetTeam()
-    {
-        if (!isServer)
-            return;
-
-        team = 1 - gameManager.localPlayerTeam;
-        RpcSetTeam(team);
-    }
-
     [Command]
     void CmdDestroyTree(GameObject tree)
     {
@@ -131,10 +139,7 @@ public class ClickHandler : NetworkBehaviour
         RpcDebugTree(tb.team, team);
         if (tb.team == team)
         {
-            Debug.Log("Destroying tree");
             RpcDestroyTree(tree);
         }
-        else
-            Debug.Log("tapped tree for other team");
     }
 }

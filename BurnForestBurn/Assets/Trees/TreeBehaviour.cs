@@ -21,8 +21,6 @@ public class TreeBehaviour : NetworkBehaviour
 
     public void DestroyTree()
     {
-        Debug.Log("Destroy tree!");
-
         if (atc)
         {
             atc.treeHarvested();

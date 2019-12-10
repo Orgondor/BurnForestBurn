@@ -13,7 +13,7 @@ public class AreaTreeController : NetworkBehaviour
     public float imageTargetScale = 6.7f;
     private int numHarvested = 0;
     
-    void Start()
+    public void SpawnTrees()
     {
         if (isServer && treePrefab)
         {
