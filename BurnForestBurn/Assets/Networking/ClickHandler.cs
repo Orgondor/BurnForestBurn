@@ -11,10 +11,15 @@ public class ClickHandler : NetworkBehaviour
     private BFBGameManager gameManager = null;
     private bool gameEnded = false;
     private NetworkManager networkManager = null;
+    private float score = 0;
+    private float displayScore = 0;
 
     public Button readyButton;
     public Button restartButton;
     public TextMeshProUGUI gameEndedText;
+    public TextMeshProUGUI scoreText;
+    public float scoreSpeed = 75.0f;
+    public float scorePerTree = 25.0f;
 
     // For debug on PC
     private bool clickBegan = true;
@@ -65,43 +70,56 @@ public class ClickHandler : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isLocalPlayer && !gameEnded)
+        if (isLocalPlayer)
         {
-            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+            if (displayScore < score)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-                RaycastHit rayhit = new RaycastHit();
-
-                if (Physics.Raycast(ray, out rayhit))
+                displayScore += scoreSpeed * Time.deltaTime;
+                if (displayScore > score)
                 {
-                    GameObject hitObject = rayhit.collider.gameObject;
-
-                    if (hitObject.tag == "tree")
-                    {
-                        CmdDestroyTree(hitObject);
-                    }
+                    displayScore = score;
                 }
             }
+            scoreText.SetText(((int)System.Math.Round(displayScore)).ToString());
 
-            // For debug on PC
-            else if (Input.GetMouseButtonDown(0) && clickBegan)
+            if (!gameEnded)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit rayhit = new RaycastHit();
-                clickBegan = false;
-
-                if (Physics.Raycast(ray, out rayhit))
+                if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
                 {
-                    GameObject hitObject = rayhit.collider.gameObject;
+                    Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                    RaycastHit rayhit = new RaycastHit();
 
-                    if (hitObject.tag == "tree")
+                    if (Physics.Raycast(ray, out rayhit))
                     {
-                        CmdDestroyTree(hitObject);
+                        GameObject hitObject = rayhit.collider.gameObject;
+
+                        if (hitObject.tag == "tree")
+                        {
+                            CmdDestroyTree(hitObject);
+                        }
                     }
                 }
+
+                // For debug on PC
+                else if (Input.GetMouseButtonDown(0) && clickBegan)
+                {
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit rayhit = new RaycastHit();
+                    clickBegan = false;
+
+                    if (Physics.Raycast(ray, out rayhit))
+                    {
+                        GameObject hitObject = rayhit.collider.gameObject;
+
+                        if (hitObject.tag == "tree")
+                        {
+                            CmdDestroyTree(hitObject);
+                        }
+                    }
+                }
+                else if (!Input.GetMouseButtonDown(0))
+                    clickBegan = true;
             }
-            else if (!Input.GetMouseButtonDown(0))
-                clickBegan = true;
         }
     }
 
@@ -151,8 +169,12 @@ public class ClickHandler : NetworkBehaviour
     [ClientRpc]
     void RpcOnGameStart()
     {
-        readyButton.interactable = false;
-        readyButton.gameObject.SetActive(false);
+        if (isLocalPlayer)
+        {
+            readyButton.interactable = false;
+            readyButton.gameObject.SetActive(false);
+            scoreText.gameObject.SetActive(true);
+        }
     }
 
     [Command]
@@ -178,6 +200,11 @@ public class ClickHandler : NetworkBehaviour
     {
         TreeBehaviour tb = tree.GetComponent<TreeBehaviour>();
         tb.DestroyTree();
+
+        if (isLocalPlayer)
+        {
+            score += scorePerTree;
+        }
     }
 
     [ClientRpc]
