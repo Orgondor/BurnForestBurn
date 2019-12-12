@@ -35,17 +35,16 @@ public class ClickHandler : NetworkBehaviour
                 gameManager = temp.GetComponent<BFBGameManager>();
                 if (gameManager)
                 {
+                    RpcDebugOutput(System.String.Format("Register clickhandler local: {0}", isLocalPlayer));
                     gameManager.RegisterOnGameStart(OnGameStart);
                     gameManager.RegisterOnGameEnd(OnGameEnd);
-                    if (isLocalPlayer)
-                    {
-                        gameManager.localPlayerTeam = Random.Range(0, 2);
-                        team = gameManager.localPlayerTeam;
-                    }
-                    else
-                        team = 1 - gameManager.localPlayerTeam;
+                    SetupTeam();
                 }
+                else
+                    Debug.Log("ERROR!!!!");
             }
+            else
+                Debug.Log("ERROR 2!!!!");
 
 
             temp = GameObject.Find("BFBNetworkingManager");
@@ -123,6 +122,29 @@ public class ClickHandler : NetworkBehaviour
         }
     }
 
+    void SetupTeam()
+    {
+        if (!isServer)
+            return;
+
+        if (isLocalPlayer)
+        {
+            gameManager.localPlayerTeam = Random.Range(0, 2);
+            team = gameManager.localPlayerTeam;
+        }
+        else if (gameManager.localPlayerTeam >= 0)
+        {
+            team = 1 - gameManager.localPlayerTeam;
+            RpcSetClientTeam(team);
+        }
+    }
+
+    [ClientRpc]
+    void RpcSetClientTeam(int teamId)
+    {
+        team = teamId;
+    }
+
     public void ReadyClicked()
     {
         CmdReadyClicked();
@@ -138,6 +160,7 @@ public class ClickHandler : NetworkBehaviour
         if (!isServer)
             return;
 
+        RpcDebugOutput(System.String.Format("OnGameStart local: {0}", isLocalPlayer));
         RpcOnGameStart();
     }
 
@@ -177,12 +200,20 @@ public class ClickHandler : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    void RpcDebugOutput(string message)
+    {
+        Debug.Log(message);
+    }
+
     [Command]
     void CmdReadyClicked()
     {
         if (!isServer)
             return;
 
+        if (team < 0)
+            SetupTeam();
         gameManager.TeamReady(team, true);
     }
 

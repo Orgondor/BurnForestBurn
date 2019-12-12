@@ -21,8 +21,10 @@ public class BFBGameManager : NetworkBehaviour
 
     void Start()
     {
-        onGameStart = new List<OnGameStart>();
-        onGameEnd = new List<OnGameEnd>();
+        if (onGameStart == null)
+            onGameStart = new List<OnGameStart>();
+        if (onGameEnd == null)
+            onGameEnd = new List<OnGameEnd>();
 
         foreach (AreaTreeController atc in areaTreeControllers)
         {
@@ -33,7 +35,7 @@ public class BFBGameManager : NetworkBehaviour
 
     void GameStart()
     {
-        if (isServer)
+        if (isServer && !gameStarted)
         {
             foreach (AreaTreeController atc in areaTreeControllers)
             {
@@ -77,17 +79,32 @@ public class BFBGameManager : NetworkBehaviour
 
     public void RegisterOnGameStart(OnGameStart ogs)
     {
+        if (onGameStart == null)
+            onGameStart = new List<OnGameStart>();
+
         onGameStart.Add(ogs);
     }
 
     public void RegisterOnGameEnd(OnGameEnd oge)
     {
+        if (onGameEnd == null)
+            onGameEnd = new List<OnGameEnd>();
+
         onGameEnd.Add(oge);
+    }
+
+    [ClientRpc]
+    void RpcDebugOutput(string message)
+    {
+        Debug.Log(message);
     }
 
     public void TeamReady(int team, bool ready)
     {
-        Debug.LogFormat("teamReady: {0} - {1}", team, ready);
+        if (!isServer)
+            return;
+
+        RpcDebugOutput(String.Format("teamReady: {0} - {1}", team, ready));
 
         if (team >= 0)
         {
@@ -104,7 +121,7 @@ public class BFBGameManager : NetworkBehaviour
             }
         }
 
-        Debug.LogFormat("teamReady: allReady - {0}", allReady);
+        RpcDebugOutput(String.Format("teamReady: allReady - {0}", allReady));
         if (allReady)
         {
             GameStart();
