@@ -24,7 +24,14 @@ public class TreeBehaviour : NetworkBehaviour
         if (atc)
         {
             atc.treeHarvested();
+            Debug.Log(gameObject.name);
+            if (gameObject.name == "Leaftree(Clone)") 
+            {
+                gameObject.GetComponent<BurnTreeAnimation>().destroyAnimation();
+            }
+            else { 
             gameObject.SetActive(false);
+            }
         }
     }
 }
